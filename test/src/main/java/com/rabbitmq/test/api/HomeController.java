@@ -2,11 +2,13 @@ package com.rabbitmq.test.api;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class HomeController {
@@ -19,15 +21,8 @@ public class HomeController {
     }
 
     @GetMapping("test")
-    public String test() throws Exception {
-        for(int i=1; i<=5; i++){
-            produce.sendMessage(i);
-            produce.sendMessage(i);
-            produce.sendMessage(i);
-            produce.sendMessage(i);
-            produce.sendMessage(i);
-//            Thread.sleep(3000);
-        }
-        return "index";
+    public String test(@RequestPart("file")MultipartFile file) throws Exception {
+        produce.sendMessage(file);
+        return "queue test";
     }
 }

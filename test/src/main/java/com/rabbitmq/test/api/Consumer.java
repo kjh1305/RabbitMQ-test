@@ -14,16 +14,12 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class Consumer {
 
-    @Value("D:\\upload\\input\\")
-    private String INPUT_FILE_PATH;
-
-    @Value("D:\\upload\\result\\")
-    private String RESULT_FILE_PATH;
+    private final FileService fileService;
 
     @RabbitListener(queues = "temp_test")
-    public void receiveMessage(Message message) throws Exception{
+    public void receiveMessage(Message message) throws Exception {
         String s = new String(message.getBody(), StandardCharsets.UTF_8);
         log.info("큐 메세지 수신 message = {}", s);
-//        Thread.sleep(3000);
+        fileService.fileUploadResult(s);
     }
 }
