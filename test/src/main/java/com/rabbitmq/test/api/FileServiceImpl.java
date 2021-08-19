@@ -18,7 +18,7 @@ import java.io.FileOutputStream;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FileServiceImp implements FileService{
+public class FileServiceImpl implements FileService{
 
     private final FileMapper fileMapper;
 
