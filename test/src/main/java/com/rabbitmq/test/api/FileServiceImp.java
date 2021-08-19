@@ -2,7 +2,6 @@ package com.rabbitmq.test.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -15,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Date;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -34,23 +31,24 @@ public class FileServiceImp implements FileService{
     @Override
     public void fileUploadInput(MultipartFile file, String filename) throws Exception {
 
+        log.info("파일 업로드 시작");
         File newFileName = new File(INPUT_FILE_PATH + filename);
         log.info("newFile={}", newFileName);
         ExcelFile excelFile = new ExcelFile();
-        excelFile.setFilename(newFileName.getName());
-        excelFile.setFiletype("input");
+        excelFile.setFile_name(newFileName.getName());
+        excelFile.setFile_type("input");
         fileMapper.fileSave(excelFile);
         file.transferTo(newFileName);
+        log.info("파일 업로드 완료");
     }
 
     @Override
     public void fileUploadResult(String s) throws Exception {
+        log.info("불러오기 할 파일이름 = {}", s);
+        ExcelFile findFile = fileMapper.findByName(s);
+        log.info("불러온 엑셀 파일 = {}", findFile);
 
-        log.info("파일 불러오기 파일이름={}", s);
-
-        //input 파일 불러오기 못 읽어오는중
-        ExcelFile findFile = fileMapper.findByName(s, "input");
-        FileInputStream fileInputStream = new FileInputStream(INPUT_FILE_PATH + findFile.getFilename());
+        FileInputStream fileInputStream = new FileInputStream(INPUT_FILE_PATH + findFile.getFile_name());
         log.info("불러온 파일 = {}", findFile);
 
         log.info("파일 가공 시작");
@@ -71,11 +69,11 @@ public class FileServiceImp implements FileService{
         log.info("result 파일 업로드 전");
         //result 파일 업로드
         ExcelFile excelFile = new ExcelFile();
-        excelFile.setFilename(findFile.getFilename());
-        excelFile.setFiletype("result");
+        excelFile.setFile_name("result" + findFile.getFile_name());
+        excelFile.setFile_type("result");
         fileMapper.fileSave(excelFile);
         log.info("result 파일 업로드 = {}", excelFile);
-        newWorkbook.write(new FileOutputStream(new File(RESULT_FILE_PATH + excelFile.getFilename())));
+        newWorkbook.write(new FileOutputStream(new File(RESULT_FILE_PATH + excelFile.getFile_name())));
         log.info("result 파일 업로드 완료");
     }
 

@@ -22,8 +22,13 @@ public class Produce {
 
     public void sendMessage(MultipartFile file) throws Exception {
         String filename = UUID.randomUUID() + file.getOriginalFilename();
-        rabbitTemplate.convertAndSend(TOPIC_EXCHANGE_NAME, "temp.test.a", filename);
-        log.info("큐 메세지 전송 message = {}", filename);
         fileService.fileUploadInput(file, filename);
+        log.info("전송 파일 이름 = {}", filename);
+
+        ExcelFile excelFile = new ExcelFile();
+        excelFile.setFile_name(filename);
+        excelFile.setFile_type("input");
+        rabbitTemplate.convertAndSend(TOPIC_EXCHANGE_NAME, "temp.test.a", excelFile);
+        log.info("큐 메세지 전송 message = {}", excelFile);
     }
 }

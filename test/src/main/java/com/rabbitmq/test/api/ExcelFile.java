@@ -1,10 +1,13 @@
 package com.rabbitmq.test.api;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class ExcelFile {
     private long id;
-    private String filename;
-    private String filetype;
+    private String file_name;
+    private String file_type;
 }
