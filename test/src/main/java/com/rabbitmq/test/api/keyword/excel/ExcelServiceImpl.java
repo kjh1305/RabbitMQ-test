@@ -15,4 +15,14 @@ public class ExcelServiceImpl implements ExcelService{
     public List<Excel> findAll() {
         return excelRepository.excelList();
     }
+
+    @Override
+    public void save(Excel excel) {
+        excelRepository.excelInsert(excel);
+    }
+
+    @Override
+    public void change(Excel excel) {
+        excelRepository.excelUpdate(excel);
+    }
 }

@@ -15,4 +15,14 @@ public class ExcelRepositoryImpl implements ExcelRepository{
     public List<Excel> excelList() {
         return excelMapper.findAll();
     }
+
+    @Override
+    public void excelInsert(Excel excel) {
+        excelMapper.insert(excel);
+    }
+
+    @Override
+    public void excelUpdate(Excel excel) {
+        excelMapper.update(excel);
+    }
 }
